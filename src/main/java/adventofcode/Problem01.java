@@ -9,25 +9,21 @@ public class Problem01 {
         Position current = new Position("north", 0, 0);
         for (Instruction instruction : instructions) {
             System.out.println(instruction);
-            if (Objects.equals(current.direction, "north") && Objects.equals(instruction.dir, "R")) {
+            if (isNorth(current) && isRight(instruction)) {
                 current = new Position("east", current.x + instruction.blocks, current.y);
-            } else if (Objects.equals(current.direction, "north") && Objects.equals(instruction.dir, "L")) {
+            } else if (isNorth(current) && isLeft(instruction)) {
                 current = new Position("west", current.x - instruction.blocks, current.y);
-            } else if (Objects.equals(current.direction, "east") && Objects.equals(instruction.dir, "R")) {
+            } else if (isEast(current) && isRight(instruction)) {
                 current = new Position("south", current.x, current.y - instruction.blocks);
-            } else if (Objects.equals(current.direction, "east") && Objects.equals(instruction.dir, "L")) {
+            } else if (isEast(current) && isLeft(instruction)) {
                 current = new Position("north", current.x, current.y + instruction.blocks);
-
-            } else if (Objects.equals(current.direction, "west") && Objects.equals(instruction.dir, "R")) {
+            } else if (isWest(current) && isRight(instruction)) {
                 current = new Position("north", current.x, current.y + instruction.blocks);
-
-            } else if (Objects.equals(current.direction, "west") && Objects.equals(instruction.dir, "L")) {
+            } else if (isWest(current) && isLeft(instruction)) {
                 current = new Position("south", current.x, current.y - instruction.blocks);
-
-            } else if (Objects.equals(current.direction, "south") && Objects.equals(instruction.dir, "L")) {
+            } else if (isSouth(current) && isLeft(instruction)) {
                 current = new Position("east", current.x + instruction.blocks, current.y);
-
-            } else if (Objects.equals(current.direction, "south") && Objects.equals(instruction.dir, "R")) {
+            } else if (isSouth(current) && isRight(instruction)) {
                 current = new Position("west", current.x - instruction.blocks, current.y);
             } else {
                 throw new IllegalArgumentException("Undefined instruction" + instruction);
@@ -35,6 +31,30 @@ public class Problem01 {
             System.out.println(current);
         }
         return current.blocks();
+    }
+
+    private static boolean isLeft(Instruction instruction) {
+        return Objects.equals(instruction.dir, "L");
+    }
+
+    private static boolean isRight(Instruction instruction) {
+        return Objects.equals(instruction.dir, "R");
+    }
+
+    private static boolean isSouth(Position current) {
+        return Objects.equals(current.direction, "south");
+    }
+
+    private static boolean isWest(Position current) {
+        return Objects.equals(current.direction, "west");
+    }
+
+    private static boolean isEast(Position current) {
+        return Objects.equals(current.direction, "east");
+    }
+
+    private static boolean isNorth(Position current) {
+        return Objects.equals(current.direction, "north");
     }
 }
 
