@@ -6,73 +6,29 @@ import java.util.Objects;
 public class Problem01 {
 
     public static int blocks(final List<Instruction> instructions) {
-        int goingEast = 0;
-        int goingNorth = 0;
         Position current = new Position("north", 0, 0);
         for (Instruction instruction : instructions) {
             System.out.println(instruction);
             if (Objects.equals(current.direction, "north") && Objects.equals(instruction.dir, "R")) {
-                if (goingEast == 0 || goingEast == 1) {
-                    current = new Position("east", current.x + instruction.blocks, current.y);
-                } else {
-                    current = new Position("east", current.x + instruction.blocks, current.y);
-                }
-                goingEast = 1;
+                current = new Position("east", current.x + instruction.blocks, current.y);
             } else if (Objects.equals(current.direction, "north") && Objects.equals(instruction.dir, "L")) {
-                if (goingEast == 0 || goingEast == 1) {
-                    current = new Position("west", current.x - instruction.blocks, current.y);
-                } else {
-                    current = new Position("west", current.x - instruction.blocks, current.y);
-                }
-                goingEast = -1;
-
+                current = new Position("west", current.x - instruction.blocks, current.y);
             } else if (Objects.equals(current.direction, "east") && Objects.equals(instruction.dir, "R")) {
-                if (goingNorth == 0 || goingNorth == 1) {
-                    current = new Position("south", current.x, current.y - instruction.blocks);
-                } else {
-                    current = new Position("south", current.x, current.y - instruction.blocks);
-                }
-                goingNorth = -1;
+                current = new Position("south", current.x, current.y - instruction.blocks);
             } else if (Objects.equals(current.direction, "east") && Objects.equals(instruction.dir, "L")) {
-                if (goingNorth == 0 || goingNorth == 1) {
-                    current = new Position("north", current.x, current.y + instruction.blocks);
-                } else {
-                    current = new Position("north", current.x, current.y + instruction.blocks);
-                }
-                goingNorth = 1;
+                current = new Position("north", current.x, current.y + instruction.blocks);
 
             } else if (Objects.equals(current.direction, "west") && Objects.equals(instruction.dir, "R")) {
-                if (goingNorth == 0 || goingNorth == 1) {
-                    current = new Position("north", current.x, current.y + instruction.blocks);
-                } else {
-                    current = new Position("north", current.x, current.y + instruction.blocks);
-                }
-                goingNorth = 1;
+                current = new Position("north", current.x, current.y + instruction.blocks);
 
             } else if (Objects.equals(current.direction, "west") && Objects.equals(instruction.dir, "L")) {
-                if (goingNorth == 0 || goingNorth == 1) {
-                    current = new Position("south", current.x, current.y - instruction.blocks);
-                } else {
-                    current = new Position("south", current.x, current.y - instruction.blocks);
-                }
-                goingNorth = -1;
+                current = new Position("south", current.x, current.y - instruction.blocks);
 
             } else if (Objects.equals(current.direction, "south") && Objects.equals(instruction.dir, "L")) {
-                if (goingEast == 0 || goingEast == 1) {
-                    current = new Position("east", current.x + instruction.blocks, current.y);
-                } else {
-                    current = new Position("east", current.x + instruction.blocks, current.y);
-                }
-
-                goingEast = 1;
+                current = new Position("east", current.x + instruction.blocks, current.y);
 
             } else if (Objects.equals(current.direction, "south") && Objects.equals(instruction.dir, "R")) {
-                if (goingEast == 0 || goingEast == 1) {
-                    current = new Position("west", current.x - instruction.blocks, current.y);
-                } else {
-                    current = new Position("west", current.x - instruction.blocks, current.y);
-                }
-                goingEast = -1;
+                current = new Position("west", current.x - instruction.blocks, current.y);
             } else {
                 throw new IllegalArgumentException("Undefined instruction" + instruction);
             }
