@@ -9,22 +9,30 @@ public class Problem01 {
         Position current = new Position("north", 0, 0);
         for (Instruction instruction : instructions) {
             System.out.println(instruction);
-            if (isNorth(current) && isRight(instruction)) {
-                current = new Position("east", current.x + instruction.blocks, current.y);
-            } else if (isNorth(current) && isLeft(instruction)) {
-                current = new Position("west", current.x - instruction.blocks, current.y);
-            } else if (isEast(current) && isRight(instruction)) {
-                current = new Position("south", current.x, current.y - instruction.blocks);
-            } else if (isEast(current) && isLeft(instruction)) {
-                current = new Position("north", current.x, current.y + instruction.blocks);
-            } else if (isWest(current) && isRight(instruction)) {
-                current = new Position("north", current.x, current.y + instruction.blocks);
-            } else if (isWest(current) && isLeft(instruction)) {
-                current = new Position("south", current.x, current.y - instruction.blocks);
-            } else if (isSouth(current) && isLeft(instruction)) {
-                current = new Position("east", current.x + instruction.blocks, current.y);
-            } else if (isSouth(current) && isRight(instruction)) {
-                current = new Position("west", current.x - instruction.blocks, current.y);
+            if (isNorth(current)) {
+                if (isRight(instruction)) {
+                    current = new Position("east", current.x + instruction.blocks, current.y);
+                } else {
+                    current = new Position("west", current.x - instruction.blocks, current.y);
+                }
+            } else if (isEast(current)) {
+                if (isRight(instruction)) {
+                    current = new Position("south", current.x, current.y - instruction.blocks);
+                } else {
+                    current = new Position("north", current.x, current.y + instruction.blocks);
+                }
+            } else if (isWest(current)) {
+                if (isRight(instruction)) {
+                    current = new Position("north", current.x, current.y + instruction.blocks);
+                } else {
+                    current = new Position("south", current.x, current.y - instruction.blocks);
+                }
+            } else if (isSouth(current)) {
+                if (isRight(instruction)) {
+                    current = new Position("west", current.x - instruction.blocks, current.y);
+                } else {
+                    current = new Position("east", current.x + instruction.blocks, current.y);
+                }
             } else {
                 throw new IllegalArgumentException("Undefined instruction" + instruction);
             }
