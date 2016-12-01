@@ -46,10 +46,30 @@ public class Problem01Test {
 
 
     @Test
-    public void actual_data() throws Exception {
-        List<String> list = Files.readAllLines(Paths.get("src", "main", "resources", "problem01.txt"));
-        List<Instruction> instructions = Arrays.stream(list.get(0).split(",")).map(s -> s.trim()).map(s -> new Instruction(s)).collect(Collectors.toList());
+    public void test_input_1() throws Exception {
+        List<String> list = Files.readAllLines(Paths.get("src", "test", "resources", "problem01.txt"));
+        List<Instruction> instructions = Arrays.stream(list.get(0).split(",")).map(String::trim).map(Instruction::new).collect(Collectors.toList());
 
-        System.out.println(Problem01.blocks(instructions));
+        int blocks = Problem01.blocks(instructions);
+        System.out.println(blocks);
+        assertThat(blocks).isEqualTo(298);
+
+    }
+
+    @Test
+    public void test_input_2() throws Exception {
+        List<String> list = Files.readAllLines(Paths.get("src", "test", "resources", "problem_011.txt"));
+        List<Instruction> instructions = Arrays.stream(list.get(0).split(",")).map(String::trim).map(Instruction::new).collect(Collectors.toList());
+        int blocks = Problem01.blocks(instructions);
+        System.out.println(blocks);
+        assertThat(blocks).isEqualTo(239);
+    }
+
+    @Test
+    public void turn_to_0() throws Exception {
+
+        Instruction r2 = new Instruction("R2");
+        int blocks = Problem01.blocks(Arrays.asList(r2, r2, r2, r2));
+        assertThat(blocks).isEqualTo(0);
     }
 }

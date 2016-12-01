@@ -15,14 +15,14 @@ public class Problem01 {
                 if (goingEast == 0 || goingEast == 1) {
                     current = new Position("east", current.x + instruction.blocks, current.y);
                 } else {
-                    current = new Position("east", current.x - instruction.blocks, current.y);
+                    current = new Position("east", current.x + instruction.blocks, current.y);
                 }
                 goingEast = 1;
             } else if (Objects.equals(current.direction, "north") && Objects.equals(instruction.dir, "L")) {
                 if (goingEast == 0 || goingEast == 1) {
                     current = new Position("west", current.x - instruction.blocks, current.y);
                 } else {
-                    current = new Position("west", current.x + instruction.blocks, current.y);
+                    current = new Position("west", current.x - instruction.blocks, current.y);
                 }
                 goingEast = -1;
 
@@ -30,14 +30,14 @@ public class Problem01 {
                 if (goingNorth == 0 || goingNorth == 1) {
                     current = new Position("south", current.x, current.y - instruction.blocks);
                 } else {
-                    current = new Position("south", current.x, current.y + instruction.blocks);
+                    current = new Position("south", current.x, current.y - instruction.blocks);
                 }
                 goingNorth = -1;
             } else if (Objects.equals(current.direction, "east") && Objects.equals(instruction.dir, "L")) {
                 if (goingNorth == 0 || goingNorth == 1) {
                     current = new Position("north", current.x, current.y + instruction.blocks);
                 } else {
-                    current = new Position("north", current.x, current.y - instruction.blocks);
+                    current = new Position("north", current.x, current.y + instruction.blocks);
                 }
                 goingNorth = 1;
 
@@ -45,7 +45,7 @@ public class Problem01 {
                 if (goingNorth == 0 || goingNorth == 1) {
                     current = new Position("north", current.x, current.y + instruction.blocks);
                 } else {
-                    current = new Position("north", current.x, current.y - instruction.blocks);
+                    current = new Position("north", current.x, current.y + instruction.blocks);
                 }
                 goingNorth = 1;
 
@@ -53,7 +53,7 @@ public class Problem01 {
                 if (goingNorth == 0 || goingNorth == 1) {
                     current = new Position("south", current.x, current.y - instruction.blocks);
                 } else {
-                    current = new Position("south", current.x, current.y + instruction.blocks);
+                    current = new Position("south", current.x, current.y - instruction.blocks);
                 }
                 goingNorth = -1;
 
@@ -61,7 +61,7 @@ public class Problem01 {
                 if (goingEast == 0 || goingEast == 1) {
                     current = new Position("east", current.x + instruction.blocks, current.y);
                 } else {
-                    current = new Position("east", current.x - instruction.blocks, current.y);
+                    current = new Position("east", current.x + instruction.blocks, current.y);
                 }
 
                 goingEast = 1;
@@ -70,7 +70,7 @@ public class Problem01 {
                 if (goingEast == 0 || goingEast == 1) {
                     current = new Position("west", current.x - instruction.blocks, current.y);
                 } else {
-                    current = new Position("west", current.x + instruction.blocks, current.y);
+                    current = new Position("west", current.x - instruction.blocks, current.y);
                 }
                 goingEast = -1;
             } else {
