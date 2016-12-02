@@ -46,7 +46,7 @@ public class Problem01Test {
 
 
     @Test
-    public void test_input_1() throws Exception {
+    public void part1_solution_input1() throws Exception {
         List<String> list = Files.readAllLines(Paths.get("src", "test", "resources", "problem01.txt"));
         List<Instruction> instructions = Arrays.stream(list.get(0).split(",")).map(String::trim).map(Instruction::new).collect(Collectors.toList());
 
@@ -57,12 +57,31 @@ public class Problem01Test {
     }
 
     @Test
-    public void test_input_2() throws Exception {
+    public void part1_solution_input2() throws Exception {
         List<String> list = Files.readAllLines(Paths.get("src", "test", "resources", "problem_011.txt"));
         List<Instruction> instructions = Arrays.stream(list.get(0).split(",")).map(String::trim).map(Instruction::new).collect(Collectors.toList());
         int blocks = Problem01.blocks(instructions);
         System.out.println(blocks);
         assertThat(blocks).isEqualTo(239);
+    }
+
+    @Test
+    public void part2_solution_input2() throws Exception {
+        List<String> list = Files.readAllLines(Paths.get("src", "test", "resources", "problem_011.txt"));
+        List<Instruction> instructions = Arrays.stream(list.get(0).split(",")).map(String::trim).map(Instruction::new).collect(Collectors.toList());
+        int blocks = Problem01.blocks(instructions);
+    }
+
+    @Test
+    public void part2_solution_input1() throws Exception {
+        List<String> list = Files.readAllLines(Paths.get("src", "test", "resources", "problem01.txt"));
+        List<Instruction> instructions = Arrays.stream(list.get(0).split(",")).map(String::trim).map(Instruction::new).collect(Collectors.toList());
+        int blocks = Problem01.blocks(instructions);
+    }
+
+    @Test
+    public void part2() throws Exception {
+        int blocks = Problem01.blocks(Arrays.asList(new Instruction("R8"), new Instruction("R4"), new Instruction("R4"), new Instruction("R8")));
     }
 
     @Test

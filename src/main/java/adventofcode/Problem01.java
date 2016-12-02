@@ -1,44 +1,86 @@
 package adventofcode;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Problem01 {
 
     public static int blocks(final List<Instruction> instructions) {
-        Position current = new Position("north", 0, 0);
+        Set<Point> visited = new HashSet<>();
+        Position current = new Position("north", new Point(0, 0));
+        visited.add(new Point(0, 0));
         for (Instruction instruction : instructions) {
-            System.out.println(instruction);
+//            System.out.println(instruction);
+            Point prev = current.point;
+            int dis = instruction.blocks;
+            List<Point> points;
             if (isNorth(current)) {
                 if (isRight(instruction)) {
-                    current = new Position("east", current.x + instruction.blocks, current.y);
+                    points = xPoints(current.point.x, current.point.y, dis);
+                    current = new Position("east", new Point(current.point.x + dis, current.point.y));
                 } else {
-                    current = new Position("west", current.x - instruction.blocks, current.y);
+                    Point point = new Point(current.point.x - dis, current.point.y);
+                    current = new Position("west", point);
+                    points = xPoints(point.x, point.y, dis);
                 }
             } else if (isEast(current)) {
                 if (isRight(instruction)) {
-                    current = new Position("south", current.x, current.y - instruction.blocks);
+                    Point point = new Point(current.point.x, current.point.y - dis);
+                    current = new Position("south", point);
+                    points = yPoints(point.x, point.y, dis);
                 } else {
-                    current = new Position("north", current.x, current.y + instruction.blocks);
+                    points = yPoints(current.point.x, current.point.y, dis);
+                    current = new Position("north", new Point(current.point.x, current.point.y + dis));
                 }
             } else if (isWest(current)) {
                 if (isRight(instruction)) {
-                    current = new Position("north", current.x, current.y + instruction.blocks);
+                    points = yPoints(current.point.x, current.point.y, dis);
+                    current = new Position("north", new Point(current.point.x, current.point.y + dis));
                 } else {
-                    current = new Position("south", current.x, current.y - instruction.blocks);
+                    Point point = new Point(current.point.x, current.point.y - dis);
+                    current = new Position("south", point);
+                    points = yPoints(point.x, point.y, dis);
                 }
             } else if (isSouth(current)) {
                 if (isRight(instruction)) {
-                    current = new Position("west", current.x - instruction.blocks, current.y);
+                    Point point = new Point(current.point.x - dis, current.point.y);
+                    current = new Position("west", point);
+                    points = xPoints(point.x, point.y, dis);
                 } else {
-                    current = new Position("east", current.x + instruction.blocks, current.y);
+                    points = xPoints(current.point.x, current.point.y, dis);
+                    current = new Position("east", new Point(current.point.x + dis, current.point.y));
                 }
             } else {
                 throw new IllegalArgumentException("Undefined instruction" + instruction);
             }
             System.out.println(current);
+
+            for (Point point : points) {
+                if (visited.contains(point)) {
+                    System.out.println("Found point visited twice >> " + point);
+                    return 0;
+                }else{
+                    visited.add(point);
+                }
+            }
+
         }
         return current.blocks();
+    }
+
+    private static List<Point> yPoints(int x, int y, int dis) {
+        List<Point> points = new ArrayList<>();
+        for (int i = 1; i < dis; i++) {
+            points.add(new Point(x, y + i));
+        }
+        return points;
+    }
+
+    private static List<Point> xPoints(int x, int y, int dis) {
+        List<Point> points = new ArrayList<>();
+        for (int i = 1; i < dis; i++) {
+            points.add(new Point(x + i, y));
+        }
+        return points;
     }
 
     private static boolean isLeft(Instruction instruction) {
@@ -89,21 +131,57 @@ class Instruction {
 class Position {
 
     final String direction;
-    final int x;
-    final int y;
+    final Point point;
 
-    public Position(String direction, int x, int y) {
+
+    public Position(String direction, Point point) {
         this.direction = direction;
-        this.x = x;
-        this.y = y;
+        this.point = point;
     }
 
     public int blocks() {
-        return Math.abs(this.x) + Math.abs(this.y);
+        return Math.abs(this.point.x) + Math.abs(this.point.y);
     }
 
     @Override
     public String toString() {
-        return String.format("%s:(%d,%d)", direction, x, y);
+        return String.format("%s:(%d,%d)", direction, point.x, point.y);
+    }
+}
+
+class Point {
+    final int x;
+    final int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Point point = (Point) o;
+
+        if (x != point.x) return false;
+        return y == point.y;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        result = 31 * result + y;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Point{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
     }
 }
