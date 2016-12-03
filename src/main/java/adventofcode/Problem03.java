@@ -9,13 +9,12 @@ import static java.util.stream.Collectors.toList;
 public class Problem03 {
 
 
-    public static int countTriangles_part1(List<String> lines) {
+    public static long countTriangles_part1(List<String> lines) {
         return lines
                 .stream()
                 .map(Triangle::new)
                 .filter(Triangle::isValid)
-                .collect(toList())
-                .size();
+                .count();
     }
 
     public static int countTriangles_part2(List<String> lines) {

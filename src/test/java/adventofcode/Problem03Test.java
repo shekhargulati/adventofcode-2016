@@ -24,8 +24,8 @@ public class Problem03Test {
 
     @Test
     public void input_1_part1() throws Exception {
-        int count = Problem03.countTriangles_part1(Files.readAllLines(Paths.get("src", "test", "resources", "problem03.txt")));
-        assertThat(count).isEqualTo(1050);
+        long count = Problem03.countTriangles_part1(Files.readAllLines(Paths.get("src", "test", "resources", "problem03.txt")));
+        assertThat(count).isEqualTo(1050L);
     }
 
     @Test
@@ -38,8 +38,8 @@ public class Problem03Test {
 
     @Test
     public void input_1_part1_another() throws Exception {
-        int count = Problem03.countTriangles_part1(Files.readAllLines(Paths.get("src", "test", "resources", "problem03_2.txt")));
-        assertThat(count).isEqualTo(862);
+        long count = Problem03.countTriangles_part1(Files.readAllLines(Paths.get("src", "test", "resources", "problem03_2.txt")));
+        assertThat(count).isEqualTo(862L);
     }
 
     @Test
