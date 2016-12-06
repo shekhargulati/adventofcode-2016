@@ -3,35 +3,49 @@ package adventofcode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static java.util.stream.Collectors.joining;
+
+/**
+ * Read problem statement in src/main/resources/problem-statements/problem06.txt
+ */
 public class Problem06 {
 
-    public static void main(String[] args) throws Exception {
-        Path inputFilePath = Paths.get("src", "main", "resources", "problem06.txt");
-        System.out.println(problem06(inputFilePath, Problem06::max));
-        System.out.println(problem06(inputFilePath, Problem06::min));
+    public static String part1(Path inputFilePath) throws Exception {
+        return findCode(inputFilePath, Problem06::max);
     }
 
-    private static String problem06(Path path, Function<String, String> fx) throws IOException {
-        List<String> lines = Files.readAllLines(path);
-        String[] columns = new String[8];
-        for (String line : lines) {
-            String[] chs = line.split("");
-            int col = 0;
-            for (String ch : chs) {
-                columns[col] = (columns[col] == null ? "" : columns[col]) + ch;
-                col++;
-            }
-        }
+    public static String part2(Path inputFilePath) throws Exception {
+        return findCode(inputFilePath, Problem06::min);
+    }
 
-        return Arrays.stream(columns).map(fx).collect(Collectors.joining());
+    private static String findCode(Path inputFilePath, Function<String, String> converter) throws IOException {
+        Map<Integer, String> map = rowsToColumns(Files.readAllLines(inputFilePath));
+        return map.entrySet()
+                .stream()
+                .map(entry -> new SimpleEntry<>(entry.getKey(), converter.apply(entry.getValue())))
+                .sorted((e1, e2) -> e1.getKey() - e2.getKey())
+                .map(SimpleEntry::getValue)
+                .collect(joining());
+    }
+
+    private static Map<Integer, String> rowsToColumns(List<String> lines) {
+        Map<Integer, String> columnsWithText = new HashMap<>();
+        lines.forEach(line -> IntStream.range(0, line.length())
+                .forEach(index -> columnsWithText.put(
+                        index,
+                        columnsWithText.compute(
+                                index,
+                                (k, v) -> v == null ?
+                                        String.valueOf(line.charAt(k)) :
+                                        v.concat(String.valueOf(line.charAt(k)))))));
+        return columnsWithText;
     }
 
     private static String max(String input) {
