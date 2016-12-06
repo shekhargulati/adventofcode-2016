@@ -38,7 +38,6 @@ public class Problem06 {
     }
 
     private static String min(String input) {
-
         return reduce(input, maxComparator.reversed());
     }
 
