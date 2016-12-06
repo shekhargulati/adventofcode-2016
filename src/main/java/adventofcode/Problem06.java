@@ -3,6 +3,7 @@ package adventofcode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -14,6 +15,8 @@ import static java.util.stream.Collectors.*;
  * Read problem statement in src/main/resources/problem-statements/problem06.txt
  */
 public class Problem06 {
+
+    private static Comparator<Map.Entry<String, Long>> maxComparator = (e1, e2) -> Long.valueOf(e1.getValue() - e2.getValue()).intValue();
 
     public static String part1(Path inputFilePath) throws Exception {
         return findCode(inputFilePath, Problem06::max);
@@ -31,19 +34,19 @@ public class Problem06 {
     }
 
     private static String max(String input) {
-        Map<String, Long> charWithCount = Arrays.stream(input.split("")).collect(groupingBy(identity(), counting()));
-        return charWithCount.entrySet()
-                .stream()
-                .max((e1, e2) -> Long.valueOf(e1.getValue() - e2.getValue()).intValue())
-                .get()
-                .getKey();
+        return reduce(input, maxComparator);
     }
 
     private static String min(String input) {
-        Map<String, Long> charWithCount = Arrays.stream(input.split("")).collect(groupingBy(identity(), counting()));
-        return charWithCount.entrySet()
+
+        return reduce(input, maxComparator.reversed());
+    }
+
+    private static String reduce(String input, Comparator<Map.Entry<String, Long>> comparator) {
+        Map<String, Long> counter = Arrays.stream(input.split("")).collect(groupingBy(identity(), counting()));
+        return counter.entrySet()
                 .stream()
-                .min((e1, e2) -> Long.valueOf(e1.getValue() - e2.getValue()).intValue())
+                .max(comparator)
                 .get()
                 .getKey();
     }

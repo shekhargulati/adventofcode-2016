@@ -2,8 +2,10 @@ package adventofcode;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
+
+import static java.util.stream.Collectors.toList;
 
 public class Utils {
 
@@ -27,17 +29,17 @@ public class Utils {
     }
 
     public static List<String> zip(List<String> strings) {
-        List<String> result = new ArrayList<>();
         int length = strings.get(0).length();
-        for (int i = 0; i < length; i++) {
-            StringBuilder sb = new StringBuilder();
-            for (String s : strings) {
-                sb.append(s.charAt(i));
-            }
-            result.add(sb.toString());
-        }
-        return result;
-
+        return IntStream
+                .range(0, length)
+                .mapToObj(i -> {
+                    StringBuilder sb = new StringBuilder();
+                    for (String s : strings) {
+                        sb.append(s.charAt(i));
+                    }
+                    return sb.toString();
+                })
+                .collect(toList());
     }
 
 }
