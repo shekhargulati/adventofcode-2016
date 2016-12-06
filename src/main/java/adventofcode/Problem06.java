@@ -1,9 +1,8 @@
 package adventofcode;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -18,16 +17,16 @@ public class Problem06 {
 
     private static Comparator<Map.Entry<String, Long>> maxComparator = (e1, e2) -> Long.valueOf(e1.getValue() - e2.getValue()).intValue();
 
-    public static String part1(Path inputFilePath) throws Exception {
-        return findCode(inputFilePath, Problem06::max);
+    public static String part1(List<String> lines) {
+        return findCode(lines, Problem06::max);
     }
 
-    public static String part2(Path inputFilePath) throws Exception {
-        return findCode(inputFilePath, Problem06::min);
+    public static String part2(List<String> lines) {
+        return findCode(lines, Problem06::min);
     }
 
-    private static String findCode(Path inputFilePath, Function<String, String> extractor) throws Exception {
-        return zip(Files.readAllLines(inputFilePath))
+    private static String findCode(List<String> lines, Function<String, String> extractor) {
+        return zip(lines)
                 .stream()
                 .map(extractor)
                 .collect(joining());
