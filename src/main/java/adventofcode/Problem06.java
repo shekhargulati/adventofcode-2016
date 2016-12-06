@@ -37,21 +37,23 @@ public class Problem06 {
     }
 
     private static Map<Integer, String> transpose(List<String> lines) {
-        Map<Integer, String> columns = new HashMap<>();
-        lines.forEach(line ->
-                IntStream
-                        .range(0, line.length()).mapToObj(i -> i)
-                        .reduce(columns, (acc, index) -> {
-                            columns.put(
-                                    index,
-                                    columns.compute(
-                                            index,
-                                            (k, v) -> v == null
-                                                    ? String.valueOf(line.charAt(k))
-                                                    : v.concat(String.valueOf(line.charAt(k)))));
+        return lines.stream()
+                .reduce(
+                        new HashMap<Integer, String>(),
+                        (columns, line) -> {
+                            IntStream
+                                    .range(0, line.length())
+                                    .forEach(index ->
+                                            columns.put(
+                                                    index,
+                                                    columns.compute(
+                                                            index,
+                                                            (k, v) -> v == null
+                                                                    ? String.valueOf(line.charAt(k))
+                                                                    : v.concat(String.valueOf(line.charAt(k))))));
                             return columns;
-                        }, (m1, m2) -> m1));
-        return columns;
+                        },
+                        (m1, m2) -> m1);
     }
 
     private static String max(String input) {
