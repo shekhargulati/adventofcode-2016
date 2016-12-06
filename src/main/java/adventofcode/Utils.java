@@ -2,10 +2,12 @@ package adventofcode;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MD5Digest {
+public class Utils {
 
-    public static String md5(String input)  {
+    public static String md5(final String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(input.getBytes());
@@ -22,6 +24,20 @@ public class MD5Digest {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static List<String> zip(List<String> strings) {
+        List<String> result = new ArrayList<>();
+        int length = strings.get(0).length();
+        for (int i = 0; i < length; i++) {
+            StringBuilder sb = new StringBuilder();
+            for (String s : strings) {
+                sb.append(s.charAt(i));
+            }
+            result.add(sb.toString());
+        }
+        return result;
+
     }
 
 }

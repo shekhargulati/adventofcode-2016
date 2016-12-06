@@ -14,7 +14,7 @@ public class Problem05 {
         String doorId = "abbhdwsy";
         List<SimpleEntry<Integer, String>> result = LongStream
                 .iterate(1L, i -> i + 1)
-                .mapToObj(number -> MD5Digest.md5(String.format("%s%d", doorId, number)))
+                .mapToObj(number -> Utils.md5(String.format("%s%d", doorId, number)))
                 .filter(str -> str.startsWith("00000"))
                 .map(str -> new SimpleEntry<>(String.valueOf(str.charAt(5)), str))
                 .filter(entry -> {
@@ -48,7 +48,7 @@ public class Problem05 {
         String doorId = "abc";
         String result = LongStream
                 .iterate(1L, i -> i + 1)
-                .mapToObj(number -> MD5Digest.md5(String.format("%s%d", doorId, number)))
+                .mapToObj(number -> Utils.md5(String.format("%s%d", doorId, number)))
                 .filter(str -> str.startsWith("00000"))
                 .limit(8)
                 .peek(System.out::println)

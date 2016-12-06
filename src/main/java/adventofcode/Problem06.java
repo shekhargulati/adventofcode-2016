@@ -2,14 +2,11 @@ package adventofcode;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 
+import static adventofcode.Utils.zip;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
 
@@ -27,33 +24,10 @@ public class Problem06 {
     }
 
     private static String findCode(Path inputFilePath, Function<String, String> extractor) throws Exception {
-        Map<Integer, String> map = transpose(Files.readAllLines(inputFilePath));
-        return map.entrySet()
+        return zip(Files.readAllLines(inputFilePath))
                 .stream()
-                .map(entry -> new SimpleEntry<>(entry.getKey(), extractor.apply(entry.getValue())))
-                .sorted((e1, e2) -> e1.getKey() - e2.getKey())
-                .map(SimpleEntry::getValue)
+                .map(extractor)
                 .collect(joining());
-    }
-
-    private static Map<Integer, String> transpose(List<String> lines) {
-        return lines.stream()
-                .reduce(
-                        new HashMap<Integer, String>(),
-                        (columns, line) -> {
-                            IntStream
-                                    .range(0, line.length())
-                                    .forEach(index ->
-                                            columns.put(
-                                                    index,
-                                                    columns.compute(
-                                                            index,
-                                                            (k, v) -> v == null
-                                                                    ? String.valueOf(line.charAt(k))
-                                                                    : v.concat(String.valueOf(line.charAt(k))))));
-                            return columns;
-                        },
-                        (m1, m2) -> m1);
     }
 
     private static String max(String input) {
