@@ -6,8 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class Problem07Test {
 
@@ -31,14 +30,14 @@ public class Problem07Test {
     public void part1_test() throws Exception {
         List<String> lines = Files.readAllLines(Paths.get("src", "test", "resources", "problem07.txt"));
         long count = lines.stream().filter(line -> Problem07.part1(line)).count();
-        assertThat(count).isEqualTo(0L);
+        assertThat(count).isEqualTo(110L);
     }
 
     @Test
     public void part2_test() throws Exception {
         List<String> lines = Files.readAllLines(Paths.get("src", "test", "resources", "problem07.txt"));
         long count = lines.stream().filter(line -> Problem07.part1(line)).count();
-        assertThat(count).isEqualTo(0L);
+        assertThat(count).isEqualTo(242L);
     }
 
     @Test
