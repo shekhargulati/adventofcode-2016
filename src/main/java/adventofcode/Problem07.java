@@ -1,11 +1,12 @@
 package adventofcode;
 
-import strman.Strman;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
+import static strman.Strman.between;
+import static strman.Strman.reverse;
 
 public class Problem07 {
 
@@ -19,11 +20,11 @@ public class Problem07 {
 
     private static boolean isTls(String ipAddress) {
         String[] hypernetSequences = hypernetSequences(ipAddress);
-        if (Arrays.stream(hypernetSequences).filter(Problem07::hasPalindrome).findAny().isPresent()) {
+        if (Arrays.stream(hypernetSequences).filter(Problem07::hasAbbaSequence).findAny().isPresent()) {
             return false;
         }
         String[] supernetSequences = supernetSequences(ipAddress);
-        return Arrays.stream(supernetSequences).filter(Problem07::hasPalindrome).findAny().isPresent();
+        return Arrays.stream(supernetSequences).filter(Problem07::hasAbbaSequence).findAny().isPresent();
     }
 
     private static boolean isSsl(String input) {
@@ -37,11 +38,13 @@ public class Problem07 {
         }
         String[] hypernetSequences = hypernetSequences(input);
         return Arrays.stream(hypernetSequences)
-                .filter(sequence -> abaSequences.stream().filter(s1 -> hasBabSequence(sequence, s1.charAt(0), s1.charAt(1))).findAny().isPresent()).findAny().isPresent();
+                .filter(sequence -> abaSequences.stream().filter(s1 -> hasBabSequence(sequence, s1.charAt(0), s1.charAt(1))).findAny().isPresent())
+                .findAny()
+                .isPresent();
     }
 
     private static String[] hypernetSequences(String input) {
-        String[] between1 = Strman.between(input, "[", "]");
+        String[] between1 = between(input, "[", "]");
         return Arrays.copyOfRange(between1, 0, between1.length - 1);
     }
 
@@ -56,7 +59,7 @@ public class Problem07 {
         }).toArray(String[]::new);
     }
 
-    public static void populateAllAbaSequences(String str, List<String> list) {
+    private static void populateAllAbaSequences(String str, List<String> list) {
         if (str.length() < 3) {
             return;
         }
@@ -67,7 +70,7 @@ public class Problem07 {
         populateAllAbaSequences(str.substring(1), list);
     }
 
-    public static boolean hasBabSequence(String str, char a, char b) {
+    private static boolean hasBabSequence(String str, char a, char b) {
         if (str.length() < 3) {
             return false;
         }
@@ -78,16 +81,16 @@ public class Problem07 {
         return hasBabSequence(str.substring(1), a, b);
     }
 
-    public static boolean hasPalindrome(String str) {
+    private static boolean hasAbbaSequence(String str) {
         if (str.length() < 4) {
             return false;
         }
-        String substring = str.substring(0, 4);
-        if (Objects.equals(substring, new StringBuilder(substring).reverse().toString())
-                && Arrays.stream(substring.split("")).distinct().count() == 2) {
+        String sequence = str.substring(0, 4);
+        if (Objects.equals(sequence, reverse(sequence))
+                && Arrays.stream(sequence.split("")).distinct().count() == 2) {
             return true;
         }
-        return hasPalindrome(str.substring(1));
+        return hasAbbaSequence(str.substring(1));
     }
 
 
