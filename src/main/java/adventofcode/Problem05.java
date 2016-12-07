@@ -7,6 +7,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
+import static adventofcode.Utils.md5;
+import static java.util.stream.Collectors.joining;
+
 public class Problem05 {
 
     public static void main(String[] args) {
@@ -14,7 +17,7 @@ public class Problem05 {
         String doorId = "abbhdwsy";
         List<SimpleEntry<Integer, String>> result = LongStream
                 .iterate(1L, i -> i + 1)
-                .mapToObj(number -> Utils.md5(String.format("%s%d", doorId, number)))
+                .mapToObj(number -> md5(String.format("%s%d", doorId, number)))
                 .filter(str -> str.startsWith("00000"))
                 .map(str -> new SimpleEntry<>(String.valueOf(str.charAt(5)), str))
                 .filter(entry -> {
@@ -26,11 +29,9 @@ public class Problem05 {
                 })
                 .map(entry -> new SimpleEntry<>(Integer.parseInt(entry.getKey()), entry.getValue()))
                 .map(entry -> new SimpleEntry<>(entry.getKey(), String.valueOf(entry.getValue().charAt(6))))
-                .peek(System.out::println)
                 .limit(20)
                 .collect(Collectors.toList());
 
-        System.out.println(result);
         String[] r = new String[8];
         for (int i = 0; i < 8; i++) {
             for (SimpleEntry<Integer, String> entry : result) {
@@ -40,21 +41,18 @@ public class Problem05 {
                 }
             }
         }
-        System.out.println(Arrays.stream(r).collect(Collectors.joining("")));
+        System.out.println(Arrays.stream(r).collect(joining("")));
 
     }
 
-    public static String part1() {
-        String doorId = "abc";
+    public static String part1(String doorId) {
         String result = LongStream
                 .iterate(1L, i -> i + 1)
-                .mapToObj(number -> Utils.md5(String.format("%s%d", doorId, number)))
-                .filter(str -> str.startsWith("00000"))
+                .mapToObj(number -> md5(String.format("%s%d", doorId, number)))
+                .filter(hash -> hash.startsWith("00000"))
                 .limit(8)
-                .peek(System.out::println)
                 .map(str -> String.valueOf(str.charAt(5)))
-                .collect(Collectors.joining(""));
-        System.out.println(result);
+                .collect(joining(""));
         return result;
     }
 }
