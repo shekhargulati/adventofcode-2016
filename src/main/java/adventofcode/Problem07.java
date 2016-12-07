@@ -26,29 +26,17 @@ public class Problem07 {
         return Arrays.stream(supernetSequences).filter(Problem07::hasPalindrome).findAny().isPresent();
     }
 
-    public static boolean isSsl(String input) {
+    private static boolean isSsl(String input) {
         String[] supernetSequences = supernetSequences(input);
-
-        List<String> list = new ArrayList<>();
+        List<String> abaSequences = new ArrayList<>();
         for (String string : supernetSequences) {
-            hasAba(string, list);
+            populateAllAbaSequences(string, abaSequences);
         }
-
-        if (list.isEmpty()) {
+        if (abaSequences.isEmpty()) {
             return false;
         }
-
         String[] hypernetSequences = hypernetSequences(input);
-        boolean notBetween = false;
-        for (String sequence : hypernetSequences) {
-            for (String s1 : list) {
-                if (hasBab(sequence, s1.charAt(0), s1.charAt(1))) {
-                    return true;
-                }
-            }
-        }
-
-        return notBetween;
+        return Arrays.stream(hypernetSequences).filter(sequence -> abaSequences.stream().filter(s1 -> hasBabSequence(sequence, s1.charAt(0), s1.charAt(1))).findAny().isPresent()).findAny().isPresent();
     }
 
     private static String[] hypernetSequences(String input) {
@@ -67,18 +55,18 @@ public class Problem07 {
         }).toArray(String[]::new);
     }
 
-    public static String hasAba(String str, List<String> list) {
+    public static void populateAllAbaSequences(String str, List<String> list) {
         if (str.length() < 3) {
-            return null;
+            return;
         }
         String substring = str.substring(0, 3);
         if ((substring.charAt(0) == substring.charAt(2) && substring.charAt(0) != substring.charAt(1)) && Arrays.stream(substring.split("")).distinct().count() == 2) {
             list.add(substring);
         }
-        return hasAba(str.substring(1), list);
+        populateAllAbaSequences(str.substring(1), list);
     }
 
-    public static boolean hasBab(String str, char a, char b) {
+    public static boolean hasBabSequence(String str, char a, char b) {
         if (str.length() < 3) {
             return false;
         }
@@ -86,7 +74,7 @@ public class Problem07 {
         if ((substring.charAt(0) == b && substring.charAt(2) == b && substring.charAt(1) == a) && Arrays.stream(substring.split("")).distinct().count() == 2) {
             return true;
         }
-        return hasBab(str.substring(1), a, b);
+        return hasBabSequence(str.substring(1), a, b);
     }
 
     public static boolean hasPalindrome(String str) {
