@@ -12,9 +12,8 @@ import static java.util.stream.Collectors.joining;
 
 public class Problem05 {
 
-    public static void main(String[] args) {
+    public static String part2(String doorId) {
 
-        String doorId = "abbhdwsy";
         List<SimpleEntry<Integer, String>> result = LongStream
                 .iterate(1L, i -> i + 1)
                 .mapToObj(number -> md5(String.format("%s%d", doorId, number)))
@@ -41,8 +40,7 @@ public class Problem05 {
                 }
             }
         }
-        System.out.println(Arrays.stream(r).collect(joining("")));
-
+        return Arrays.stream(r).collect(joining(""));
     }
 
     public static String part1(String doorId) {
