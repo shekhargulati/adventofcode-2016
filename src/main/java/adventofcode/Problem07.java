@@ -9,23 +9,25 @@ import java.util.Objects;
 
 public class Problem07 {
 
-    public static boolean part1(String input) {
-        /*
-            1. split by [
-            2.then split by ]
-            3 take 0 then take 1
-            4. find substring that is palindromic
-         */
+    public static long count_part1(List<String> lines) {
+        return lines.stream().filter(Problem07::isTls).count();
+    }
 
-        String[] between1 = Strman.between(input, "[", "]");
-        String[] parts = input.split("]");
-        String start = "[";
-        String[] supernetSequences = Arrays.stream(parts).map(subPart -> {
-            if (!subPart.contains(start)) {
-                return subPart;
-            }
-            return subPart.substring(0, subPart.indexOf(start));
-        }).toArray(String[]::new);
+    public static long count_part2(List<String> lines) {
+        return lines.stream().filter(Problem07::isSsl).count();
+    }
+
+    private static boolean isTls(String ipAddress) {
+        String[] hypernetSequences = hypernetSequences(ipAddress);
+        if (Arrays.stream(hypernetSequences).filter(Problem07::hasPalindrome).findAny().isPresent()) {
+            return false;
+        }
+        String[] supernetSequences = supernetSequences(ipAddress);
+        return Arrays.stream(supernetSequences).filter(Problem07::hasPalindrome).findAny().isPresent();
+    }
+
+    public static boolean isSsl(String input) {
+        String[] supernetSequences = supernetSequences(input);
 
         List<String> list = new ArrayList<>();
         for (String string : supernetSequences) {
@@ -36,7 +38,7 @@ public class Problem07 {
             return false;
         }
 
-        String[] hypernetSequences = Arrays.copyOfRange(between1, 0, between1.length - 1);
+        String[] hypernetSequences = hypernetSequences(input);
         boolean notBetween = false;
         for (String sequence : hypernetSequences) {
             for (String s1 : list) {
@@ -47,6 +49,22 @@ public class Problem07 {
         }
 
         return notBetween;
+    }
+
+    private static String[] hypernetSequences(String input) {
+        String[] between1 = Strman.between(input, "[", "]");
+        return Arrays.copyOfRange(between1, 0, between1.length - 1);
+    }
+
+    private static String[] supernetSequences(String input) {
+        String[] parts = input.split("]");
+        String start = "[";
+        return Arrays.stream(parts).map(subPart -> {
+            if (!subPart.contains(start)) {
+                return subPart;
+            }
+            return subPart.substring(0, subPart.indexOf(start));
+        }).toArray(String[]::new);
     }
 
     public static String hasAba(String str, List<String> list) {
