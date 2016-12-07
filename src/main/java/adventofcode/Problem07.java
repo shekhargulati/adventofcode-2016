@@ -36,7 +36,8 @@ public class Problem07 {
             return false;
         }
         String[] hypernetSequences = hypernetSequences(input);
-        return Arrays.stream(hypernetSequences).filter(sequence -> abaSequences.stream().filter(s1 -> hasBabSequence(sequence, s1.charAt(0), s1.charAt(1))).findAny().isPresent()).findAny().isPresent();
+        return Arrays.stream(hypernetSequences)
+                .filter(sequence -> abaSequences.stream().filter(s1 -> hasBabSequence(sequence, s1.charAt(0), s1.charAt(1))).findAny().isPresent()).findAny().isPresent();
     }
 
     private static String[] hypernetSequences(String input) {
@@ -82,7 +83,8 @@ public class Problem07 {
             return false;
         }
         String substring = str.substring(0, 4);
-        if (Objects.equals(substring, new StringBuilder(substring).reverse().toString()) && Arrays.stream(substring.split("")).distinct().count() == 2) {
+        if (Objects.equals(substring, new StringBuilder(substring).reverse().toString())
+                && Arrays.stream(substring.split("")).distinct().count() == 2) {
             return true;
         }
         return hasPalindrome(str.substring(1));
