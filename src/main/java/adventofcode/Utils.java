@@ -42,4 +42,8 @@ public class Utils {
                 .collect(toList());
     }
 
+    public static int toInt(String str){
+        return Integer.parseInt(str);
+    }
+
 }
