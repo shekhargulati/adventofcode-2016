@@ -15,68 +15,51 @@ public class Problem08 {
     public static void main(String[] args) throws IOException {
         String[][] screen = new String[6][50];
         init(screen);
-        int count = count(screen, Files.readAllLines(Paths.get("src", "test", "resources", "problem08.txt")));
+        long count = count(screen, Files.readAllLines(Paths.get("src", "test", "resources", "problem08.txt")));
         System.out.println(count);
         toString(screen);
     }
 
 
-    private static int count(String[][] screen, List<String> cmds) {
+    private static long count(String[][] screen, List<String> cmds) {
         int rows = screen.length;
         int cols = screen[0].length;
         for (String cmd : cmds) {
             String[] parts = cmd.split("\\s");
-            String type = parts[0];
-            if (Objects.equals(type, "rect")) {
+            if (cmd.startsWith("rect")) {
                 String[] dim = parts[1].split("x");
-                int a = toInt(dim[0]);
-                int b = toInt(dim[1]);
-                for (int i = 0; i < b; i++) {
-                    for (int j = 0; j < a; j++) {
-                        screen[i][j] = "#";
-                    }
-                }
-            } else if (Objects.equals(type, "rotate") && Objects.equals(parts[1], "column")) {
-                String[] strs = parts[2].split("=");
-                if (strs[0].equals("x")) {
-                    rotateDown(screen, rows, parts[4], strs[1]);
+                fillRect(screen, toInt(dim[0]), toInt(dim[1]));
+            } else {
+                int side = toInt(parts[2].split("=")[1]);
+                int by = toInt(parts[4]);
+                if (cmd.startsWith("rotate column x") || cmd.startsWith("rotate row x")) {
+                    rotateDown(screen, rows, by, side);
                 } else {
-                    rotateRight(screen, cols, parts[4], strs[1]);
-                }
-            } else if (Objects.equals(type, "rotate") && Objects.equals(parts[1], "row")) {
-                String[] strs = parts[2].split("=");
-                if (strs[0].equals("y")) {
-                    rotateRight(screen, cols, parts[4], strs[1]);
-                } else {
-                    rotateDown(screen, rows, parts[4], strs[1]);
-                }
-            }
-
-        }
-        int count = 0;
-        for (String[] ints : screen) {
-            for (String anInt : ints) {
-                if (Objects.equals(anInt, "#")) {
-                    count++;
+                    rotateRight(screen, cols, by, side);
                 }
             }
         }
-        return count;
+        return Arrays.stream(screen).flatMap(Arrays::stream).filter(s -> Objects.equals(s, "#")).count();
     }
 
-    private static void rotateDown(String[][] screen, int rows, String part, String str) {
-        int x = Integer.parseInt(str);
-        int by = Integer.parseInt(part);
+    private static void fillRect(String[][] screen, int a, int b) {
+        for (int i = 0; i < b; i++) {
+            for (int j = 0; j < a; j++) {
+                screen[i][j] = "#";
+            }
+        }
+    }
+
+    private static void rotateDown(String[][] screen, int rows, int by, int x) {
         String[] tmp = new String[rows];
-        for (int i = 0; i < screen.length; i++) {
+        for (int i = 0; i < rows; i++) {
             for (int j = x; j <= x; j++) {
                 tmp[i] = screen[i][j];
             }
         }
-
-        for (int i = 0, v = i + by; i < screen.length; i++, v++) {
+        for (int i = 0, v = i + by; i < rows; i++, v++) {
             for (int j = x; j <= x; j++) {
-                if (v < screen.length) {
+                if (v < rows) {
                     screen[v][j] = tmp[i];
                 } else {
                     v = 0;
@@ -86,9 +69,7 @@ public class Problem08 {
         }
     }
 
-    private static void rotateRight(String[][] screen, int cols, String part, String str) {
-        int y = Integer.parseInt(str);
-        int by = Integer.parseInt(part);
+    private static void rotateRight(String[][] screen, int cols, int by, int y) {
         String[] tmp = new String[cols];
         for (int i = y; i <= y; i++) {
             for (int j = 0; j < cols; j++) {
