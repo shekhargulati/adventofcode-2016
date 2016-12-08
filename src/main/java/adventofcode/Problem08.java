@@ -13,13 +13,13 @@ import static java.util.stream.Collectors.joining;
 public class Problem08 {
 
     public static void main(String[] args) throws IOException {
+        List<String> cmds = Files.readAllLines(Paths.get("src", "test", "resources", "problem08.txt"));
         String[][] screen = new String[6][50];
         init(screen);
-        long count = count(screen, Files.readAllLines(Paths.get("src", "test", "resources", "problem08.txt")));
+        long count = count(screen, cmds);
         System.out.println(count);
         toString(screen);
     }
-
 
     private static long count(String[][] screen, List<String> cmds) {
         int rows = screen.length;
@@ -51,42 +51,47 @@ public class Problem08 {
     }
 
     private static void rotateDown(String[][] screen, int rows, int by, int x) {
-        String[] tmp = new String[rows];
+        String[] copy = copyCol(screen, rows, x, by);
         for (int i = 0; i < rows; i++) {
             for (int j = x; j <= x; j++) {
-                tmp[i] = screen[i][j];
-            }
-        }
-        for (int i = 0, v = i + by; i < rows; i++, v++) {
-            for (int j = x; j <= x; j++) {
-                if (v < rows) {
-                    screen[v][j] = tmp[i];
-                } else {
-                    v = 0;
-                    screen[v][j] = tmp[i];
-                }
+                screen[i][j] = copy[i];
             }
         }
     }
 
     private static void rotateRight(String[][] screen, int cols, int by, int y) {
-        String[] tmp = new String[cols];
+        String[] copy = copyRow(screen, cols, y, by);
         for (int i = y; i <= y; i++) {
             for (int j = 0; j < cols; j++) {
-                tmp[j] = screen[i][j];
+                screen[i][j] = copy[j];
             }
         }
+    }
 
+    private static String[] copyRow(String[][] screen, int length, int y, int by) {
+        String[] copy = new String[length];
         for (int i = y; i <= y; i++) {
-            for (int j = 0, v = j + by; j < cols; j++, v++) {
-                if (v < cols) {
-                    screen[i][v] = tmp[j];
-                } else {
-                    v = 0;
-                    screen[i][v] = tmp[j];
+            for (int j = 0, nextPos = j + by; j < length; j++, nextPos++) {
+                if (nextPos == length) {
+                    nextPos = 0;
                 }
+                copy[nextPos] = screen[i][j];
             }
         }
+        return copy;
+    }
+
+    private static String[] copyCol(String[][] screen, int length, int x, int by) {
+        String[] copy = new String[length];
+        for (int i = 0, nextPos = i + by; i < length; i++, nextPos++) {
+            for (int j = x; j <= x; j++) {
+                if (nextPos == length) {
+                    nextPos = 0;
+                }
+                copy[nextPos] = screen[i][j];
+            }
+        }
+        return copy;
     }
 
     public static void toString(String[][] screen) {
@@ -94,7 +99,6 @@ public class Problem08 {
             System.out.println(Arrays.stream(row).collect(joining(" ")));
         }
     }
-
 
     private static void init(String[][] screen) {
         int rows = screen.length;
