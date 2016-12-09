@@ -1,74 +1,66 @@
 package adventofcode;
 
-import strman.Strman;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static adventofcode.Utils.toInt;
+import static strman.Strman.repeat;
 
 public class Problem09 {
 
     public static void main(String[] args) throws Exception {
         String input = Files.readAllLines(Paths.get("src", "test", "resources", "problem09.txt")).get(0);
 //        String input = "(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN";
+        long startTime1 = System.currentTimeMillis();
+        System.out.println(String.format("part 1 %d", decompressedLength(input, false))); // Answer is 98135
+        long endTime1 = System.currentTimeMillis();
+        System.out.println("Total time taken: " + (endTime1 - startTime1) / 1000 + " seconds");
 
-        System.out.println(doSth(input));
+
+        long startTime2 = System.currentTimeMillis();
+        System.out.println(String.format("part 2 %d", decompressedLength(input, true))); // Answer is 10964557606
+        long endTime2 = System.currentTimeMillis();
+        System.out.println("Total time taken: " + (endTime2 - startTime2) / 1000 + " seconds");
     }
 
-    private static long doSth(String input) {
-        StringBuilder result = new StringBuilder();
-        char[] chars = input.toCharArray();
+    private static long decompressedLength(String input, boolean part2) {
         long length = 0;
-        for (int i = 0; i < chars.length; i++) {
-            char ch = chars[i];
+        char[] chars = input.toCharArray();
+        for (int index = 0; index < chars.length; index++) {
+            char ch = chars[index];
             if (!Character.isWhitespace(ch)) {
                 if (ch == '(') {
-                    StringBuilder markerBuilder = new StringBuilder();
+                    StringBuilder marker = new StringBuilder();
                     while (ch != ')') {
-                        ch = chars[++i];
+                        ch = chars[++index];
                         if (ch != ')') {
-                            markerBuilder.append(ch);
+                            marker.append(ch);
                         }
                     }
-                    String[] parts = markerBuilder.toString().trim().split("x");
-                    int a = toInt(parts[0]);
-                    int b = toInt(parts[1]);
-                    StringBuilder s = new StringBuilder();
-                    for (int j = i + 1; j < i + 1 + a; j++) {
-                        s.append(chars[j]);
+                    String[] parts = marker.toString().trim().split("x");
+                    int take = toInt(parts[0]);
+                    int repetitions = toInt(parts[1]);
+                    String expression = takeN(chars, index + 1, index + 1 + take);
+                    String repeatedExpression = repeat(expression, repetitions);
+                    if (part2) {
+                        length += decompressedLength(repeatedExpression, part2);
+                    } else {
+                        length += repeatedExpression.length();
                     }
-                    String innerExpression = Strman.repeat(s.toString(), b);
-                    length += doSth(innerExpression);
-                    i += a;
+                    index += take;
                 } else {
-                    result.append(ch);
                     length++;
                 }
             }
         }
-
         return length;
     }
-}
 
-
-class Marker {
-
-    final int a;
-    final int b;
-
-    public Marker(String str) {
-        String[] parts = str.trim().split("x");
-        a = toInt(parts[0]);
-        b = toInt(parts[1]);
-    }
-
-    @Override
-    public String toString() {
-        return "Marker{" +
-                "a=" + a +
-                ", b=" + b +
-                '}';
+    private static String takeN(char[] chars, int start, int end) {
+        StringBuilder builder = new StringBuilder();
+        for (int j = start; j < end; j++) {
+            builder.append(chars[j]);
+        }
+        return builder.toString();
     }
 }
