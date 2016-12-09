@@ -10,7 +10,6 @@ public class Problem09 {
 
     public static void main(String[] args) throws Exception {
         String input = Files.readAllLines(Paths.get("src", "test", "resources", "problem09.txt")).get(0);
-//        String input = "(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN";
         long startTime1 = System.currentTimeMillis();
         System.out.println(String.format("part 1 %d", decompressedLength(input, false))); // Answer is 98135
         long endTime1 = System.currentTimeMillis();
