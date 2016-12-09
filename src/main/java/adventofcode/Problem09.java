@@ -4,115 +4,71 @@ import strman.Strman;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
+import static adventofcode.Utils.toInt;
 
 public class Problem09 {
 
     public static void main(String[] args) throws Exception {
-        List<String> lines = Files.readAllLines(Paths.get("src", "test", "resources", "problem09.txt"));
+        String input = Files.readAllLines(Paths.get("src", "test", "resources", "problem09.txt")).get(0);
+//        String input = "(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN";
 
-//        String input = "A(1x5)BC";
-//
-//        int l = length(input);
-//        System.out.println(l);
-//
-//        input = "(3x3)XYZ";
-//        l = length(input);
-//        System.out.println(l);
-//
-//        input = "A(2x2)BCD(2x2)EFG";
-//        l = length(input);
-//        System.out.println(l);
-//
-//        input = "(6x1)(1x3)A";
-//        l = length(input);
-//        System.out.println(l);
-//
-//        input = "X(8x2)(3x3)ABCY";
-//        l = length(input);
-//        System.out.println(l);
-
-        System.out.println(length(lines.get(0)));
-
-//        System.out.println(lines.stream().map(line -> length(line)).mapToLong(l -> l).sum());
+        System.out.println(doSth(input));
     }
 
-    private static int length(String input) {
-        List<String> expressions = between(input);
-        LinkedList<String> queue = expressions.stream().map(expression -> expression.replace("(", "").replace(")", "")).collect(Collectors.toCollection(LinkedList::new));
-        System.out.println(queue);
+    private static long doSth(String input) {
         StringBuilder result = new StringBuilder();
-        boolean skip = false;
-        int countOfQueues = 0;
-        for (int i = 0; i < input.length(); i++) {
-            String str = String.valueOf(input.charAt(i));
-            if (skip) {
-                if (Objects.equals(str, ")")) {
-                    if (!queue.isEmpty()) {
-                        String exp = queue.removeFirst();
-                        String[] parts = exp.split("x");
-                        int a = Utils.toInt(parts[0]);
-                        int b = Utils.toInt(parts[1]);
-                        String substring = input.substring(i + 1, i + 1 + a);
-                        result.append(Strman.repeat(substring, b));
-                        i = i + a;
-                        skip = false;
-                        IntStream.range(1, countOfQueues).forEach(l -> {
-                            if (!queue.isEmpty()) {
-                                queue.removeFirst();
-                            }
-                        });
+        char[] chars = input.toCharArray();
+        long length = 0;
+        for (int i = 0; i < chars.length; i++) {
+            char ch = chars[i];
+            if (!Character.isWhitespace(ch)) {
+                if (ch == '(') {
+                    StringBuilder markerBuilder = new StringBuilder();
+                    while (ch != ')') {
+                        ch = chars[++i];
+                        if (ch != ')') {
+                            markerBuilder.append(ch);
+                        }
                     }
+                    String[] parts = markerBuilder.toString().trim().split("x");
+                    int a = toInt(parts[0]);
+                    int b = toInt(parts[1]);
+                    StringBuilder s = new StringBuilder();
+                    for (int j = i + 1; j < i + 1 + a; j++) {
+                        s.append(chars[j]);
+                    }
+                    String innerExpression = Strman.repeat(s.toString(), b);
+                    length += doSth(innerExpression);
+                    i += a;
+                } else {
+                    result.append(ch);
+                    length++;
                 }
-            } else if (Objects.equals(str, "(")) {
-                skip = true;
-                countOfQueues++;
-            } else {
-                result.append(str);
             }
         }
-        System.out.println(result);
-        String r = result.toString();
-        int count = 0;
-        for (int i = 0; i < r.length(); i++) {
-            String str = String.valueOf(r.charAt(i));
-            if(str == ")" || str == "(" || isNumber(str) || str.equals("x")){
 
-            }else{
-                count++;
-            }
-        }
-        return count;
+        return length;
+    }
+}
+
+
+class Marker {
+
+    final int a;
+    final int b;
+
+    public Marker(String str) {
+        String[] parts = str.trim().split("x");
+        a = toInt(parts[0]);
+        b = toInt(parts[1]);
     }
 
-    private static List<String> between(String in) {
-//        String in = "A(2x2)BCD(2x2)EFG";
-
-        Pattern p = Pattern.compile("\\((.*?)\\)");
-        Matcher m = p.matcher(in);
-
-        List<String> r = new ArrayList<>();
-        while (m.find()) {
-            r.add(m.group(1));
-        }
-        return r;
-    }
-
-
-    private static boolean isNumber(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
+    @Override
+    public String toString() {
+        return "Marker{" +
+                "a=" + a +
+                ", b=" + b +
+                '}';
     }
 }
