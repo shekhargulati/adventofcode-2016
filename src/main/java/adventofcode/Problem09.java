@@ -40,10 +40,10 @@ public class Problem09 {
                     int take = toInt(parts[0]);
                     int repetitions = toInt(parts[1]);
                     String expression = takeN(chars, index + 1, index + 1 + take);
-                    String repeatedExpression = repeat(expression, repetitions);
                     if (part2) {
-                        length += decompressedLength(repeatedExpression, part2);
+                        length += decompressedLength(expression, part2) * repetitions;
                     } else {
+                        String repeatedExpression = repeat(expression, repetitions);
                         length += repeatedExpression.length();
                     }
                     index += take;
