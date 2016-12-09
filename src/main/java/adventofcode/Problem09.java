@@ -39,13 +39,10 @@ public class Problem09 {
                     String[] parts = marker.toString().trim().split("x");
                     int take = toInt(parts[0]);
                     int repetitions = toInt(parts[1]);
-                    String expression = takeN(chars, index + 1, index + 1 + take);
-                    if (part2) {
-                        length += decompressedLength(expression, part2) * repetitions;
-                    } else {
-                        String repeatedExpression = repeat(expression, repetitions);
-                        length += repeatedExpression.length();
-                    }
+                    String expression = mkString(chars, index + 1, index + 1 + take);
+                    length += part2
+                            ? decompressedLength(expression, part2) * repetitions
+                            : repeat(expression, repetitions).length();
                     index += take;
                 } else {
                     length++;
@@ -55,7 +52,7 @@ public class Problem09 {
         return length;
     }
 
-    private static String takeN(char[] chars, int start, int end) {
+    private static String mkString(char[] chars, int start, int end) {
         StringBuilder builder = new StringBuilder();
         for (int j = start; j < end; j++) {
             builder.append(chars[j]);
