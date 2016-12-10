@@ -26,6 +26,7 @@ public class Problem10 {
 
         List<String> seen = new ArrayList<>();
         seen.add(start.getKey());
+        Map<Integer, Integer> bins = new HashMap<>();
 
         while (!queue.isEmpty()) {
             String startingBot = queue.removeFirst().getKey();
@@ -39,12 +40,14 @@ public class Problem10 {
                             return false;
                         }
                     })
-                    .filter(l -> !l.contains("output"))
+//                    .filter(l -> !l.contains("output"))
                     .forEach(l -> {
                         System.out.println("Found line " + l);
                         String[] parts = l.split("\\s");
                         String giver = "bot " + parts[1];
+                        boolean isFirstOutput = Objects.equals(parts[5], "output");
                         String takerLow = "bot " + parts[6];
+                        boolean isSecondOutput = Objects.equals(parts[10], "output");
                         String takerHigh = "bot " + parts[11];
                         List<Integer> values = initialValues.get(giver);
                         int high = values.stream().max((i1, i2) -> i1 - i2).get();
@@ -53,27 +56,43 @@ public class Problem10 {
 //                        System.out.println("High " + high);
 //                        System.out.println("Low " + low);
 
-                        if (initialValues.containsKey(takerHigh)) {
-                            List<Integer> h = initialValues.get(takerHigh);
-                            h.add(high);
-                        } else {
-                            List<Integer> list = new ArrayList<>();
-                            list.add(high);
-                            initialValues.put(takerHigh, list);
+                        if (!isSecondOutput) {
+                            if (initialValues.containsKey(takerHigh)) {
+                                List<Integer> h = initialValues.get(takerHigh);
+                                h.add(high);
+                            } else {
+                                List<Integer> list = new ArrayList<>();
+                                list.add(high);
+                                initialValues.put(takerHigh, list);
+                            }
                         }
 
-                        if (initialValues.containsKey(takerLow)) {
-                            List<Integer> h = initialValues.get(takerLow);
-                            h.add(low);
-                        } else {
-                            List<Integer> list = new ArrayList<>();
-                            list.add(low);
-                            initialValues.put(takerLow, list);
+
+                        if (!isFirstOutput) {
+                            if (initialValues.containsKey(takerLow)) {
+                                List<Integer> h = initialValues.get(takerLow);
+                                h.add(low);
+                            } else {
+                                List<Integer> list = new ArrayList<>();
+                                list.add(low);
+                                initialValues.put(takerLow, list);
+                            }
+                        }
+                        if (isFirstOutput) {
+                            bins.put(Utils.toInt(parts[6]), low);
                         }
 
+                        if (isSecondOutput) {
+                            bins.put(Utils.toInt(parts[11]), high);
+                        }
+
+                        if (isFirstOutput && isSecondOutput) {
+                            return;
+                        }
                         Map.Entry<String, List<Integer>> next = initialValues.entrySet().stream().filter(e -> !seen.contains(e.getKey()) && e.getValue().size() == 2).findFirst().get();
                         queue.add(next);
                         seen.add(next.getKey());
+
 //                        try {
 //                            Thread.sleep(1000);
 //                        } catch (InterruptedException e) {
@@ -98,6 +117,8 @@ public class Problem10 {
                 .getKey();
 
         System.out.println("Answer is " + result);
+
+        System.out.println(bins.get(0) * bins.get(1) * bins.get(2));
 
 
     }
