@@ -14,17 +14,38 @@ public class Problem12 {
     public static void main(String[] args) throws Exception {
         List<String> instructions = Files.readAllLines(Paths.get("src", "test", "resources", "problem12.txt"));
 
-        Map<String, Integer> map = new HashMap<>();
-        map.put("a", 0);
-        map.put("b", 0);
-        map.put("c", 1);
-        map.put("d", 0);
+        long startTime = System.currentTimeMillis();
+        Map<String, Integer> state = new HashMap<>();
+        state.put("a", 0);
+        state.put("b", 0);
+        state.put("c", 0);
+        state.put("d", 0);
 
+        problem(instructions, state);
+        //318077
+        System.out.println("The value of a is " + state.get("a"));
+        long endTime = System.currentTimeMillis();
+        System.out.println("Total time taken: " + (endTime - startTime) / 1000 + " seconds");
+
+        state.clear();
+        long startTime2 = System.currentTimeMillis();
+        state.put("a", 0);
+        state.put("b", 0);
+        state.put("c", 1);
+        state.put("d", 0);
+
+        problem(instructions, state);
+        //9227731
+        System.out.println("The value of a is " + state.get("a"));
+        long endTime2 = System.currentTimeMillis();
+        System.out.println("Total time taken: " + (endTime2 - startTime2) / 1000 + " seconds");
+    }
+
+    private static void problem(List<String> instructions, Map<String, Integer> map) {
         for (int i = 0; i < instructions.size(); i++) {
             String instruction = instructions.get(i);
             String[] parts = instruction.split("\\s");
             String cmd = parts[0];
-            System.out.println(instruction);
             if (Objects.equals(cmd, "cpy")) {
                 String x = parts[1];
                 String y = parts[2];
@@ -42,15 +63,10 @@ public class Problem12 {
                 int xValue = isNumber(x) ? toInt(x) : map.get(x);
                 if (xValue != 0) {
                     int v = isNumber(y) ? toInt(y) : map.get(y);
-                    if (v < 0) {
-                        i += (v - 1);
-                    } else {
-                        i += (v - 1);
-                    }
+                    i += (v - 1);
                 }
             }
         }
-        System.out.println(map.get("a"));
     }
 
     private static boolean isNumber(String str) {
