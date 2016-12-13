@@ -14,7 +14,7 @@ public class Problem11_1 {
 
     private static int getMoves(int[] items) {
         int moves = 0;
-        while (items[3] != Arrays.stream(items).sum()) {
+        while (items[items.length - 1] != Arrays.stream(items).sum()) {
             int low = 0;
             while (items[low] == 0) {
                 low += 1;
