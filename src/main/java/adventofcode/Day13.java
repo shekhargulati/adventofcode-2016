@@ -57,6 +57,8 @@ public class Day13 {
 
         printLayout(layout);
 
+        System.out.println(queue.size());
+
         System.out.println("Total number of steps " + (steps));
 
     }
