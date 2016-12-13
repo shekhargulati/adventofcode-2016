@@ -9,6 +9,7 @@ public class Point {
         this.y = y;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,4 +36,5 @@ public class Point {
                 ", y=" + y +
                 '}';
     }
+
 }
