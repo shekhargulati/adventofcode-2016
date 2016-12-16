@@ -16,7 +16,6 @@ public class Day16 {
         int discLength = 35651584;
         String initial = "01111001100111011";
         String elongated = elongate(initial, discLength);
-        System.out.println(elongated);
         String nextInput = elongated.substring(0, discLength);
         System.out.println(checksum(nextInput));
     }
