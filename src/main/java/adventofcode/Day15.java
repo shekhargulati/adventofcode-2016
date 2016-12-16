@@ -4,7 +4,6 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 
 public class Day15 {
 
@@ -19,9 +18,10 @@ public class Day15 {
                 new Disc("#7", 11, 0, 0)
         );
 
-        LongStream.iterate(0, i -> i + 1)
+        IntStream.iterate(0, i -> i + 1)
                 .filter(buttonPressTime ->
-                        IntStream.range(0, discs.size()).mapToObj(i -> new SimpleEntry<>(i + 1, discs.get(i)))
+                        IntStream.range(0, discs.size())
+                                .mapToObj(i -> new SimpleEntry<>(i + 1, discs.get(i)))
                                 .allMatch(entry ->
                                         ((buttonPressTime + entry.getValue().currentPosition + entry.getKey()) % entry.getValue().positions) == 0))
                 .limit(1)
@@ -31,11 +31,11 @@ public class Day15 {
 
 class Disc {
     String name;
-    long positions;
-    long startTime;
-    long currentPosition;
+    int positions;
+    int startTime;
+    int currentPosition;
 
-    public Disc(String name, long positions, long startTime, long currentPosition) {
+    public Disc(String name, int positions, int startTime, int currentPosition) {
         this.name = name;
         this.positions = positions;
         this.startTime = startTime;
