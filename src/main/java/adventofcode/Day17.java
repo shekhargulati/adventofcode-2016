@@ -15,7 +15,7 @@ public class Day17 {
          */
 
 //        Arrays.asList("ihgpwlah", "kglvqrro", "ulqzkmiv").forEach(input -> {
-        Arrays.asList("ioramepc").forEach(input -> {
+        Arrays.asList("ihgpwlah").forEach(input -> {
 
             StringBuilder path = new StringBuilder(input);
             int x = 0, y = 0;
@@ -51,7 +51,7 @@ public class Day17 {
                 x += next.x;
                 y += next.y;
                 path.append(next.dir);
-                if (x == 3 && y == 3) {
+                if (x >= 3 && y >= 3) {
                     allPaths.add(path.toString());
                     Game previousState = games.pop();
                     x = previousState.x;
@@ -62,8 +62,9 @@ public class Day17 {
 
             }
 
-            String result = allPaths.stream().map(s -> s.substring(input.length())).min((s1, s2) -> s1.length() - s2.length()).get();
+            String result = allPaths.stream().map(s -> s.substring(input.length())).max((s1, s2) -> s1.length() - s2.length()).get();
             System.out.println(result);
+            System.out.println(result.length());
         });
 
 
@@ -86,23 +87,10 @@ public class Day17 {
         return possibleMoves;
     }
 
-    private static boolean isPossible(Move m, String path) {
-        path += m.dir;
-        String str = Utils.md5(path).substring(0, 4);
-        return !isClosed(str);
-    }
-
-    private static boolean isClosed(String str) {
-        return !isOpen(str.charAt(0)) && !isOpen(str.charAt(1)) && !isOpen(str.charAt(2)) && !isOpen(str.charAt(3));
-    }
-
     private static boolean isOpen(char ch) {
         return ch == 'b' || ch == 'c' || ch == 'd' || ch == 'e' || ch == 'f';
     }
 
-    private static double distanceBetween(Move p1, Move p2) {
-        return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
-    }
 }
 
 class Move {
@@ -123,6 +111,10 @@ class Move {
                 ", y=" + y +
                 ", dir='" + dir + '\'' +
                 '}';
+    }
+
+    public boolean isValid() {
+        return this.x >= 0 && this.x < 4 && this.y >= 0 && this.y < 4;
     }
 }
 
