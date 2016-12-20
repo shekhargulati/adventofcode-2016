@@ -46,4 +46,8 @@ public class Utils {
         return Integer.parseInt(str);
     }
 
+    public static long toLong(String str){
+        return Long.parseLong(str);
+    }
+
 }
