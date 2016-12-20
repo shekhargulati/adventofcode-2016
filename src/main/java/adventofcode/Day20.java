@@ -2,7 +2,6 @@ package adventofcode;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.AbstractMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,39 +12,36 @@ public class Day20 {
     public static void main(String[] args) throws Exception {
         List<String> lines = Files.readAllLines(Paths.get("src", "main", "resources", "problem20.txt"));
 
-        List<AbstractMap.SimpleEntry<Long, Long>> list = lines.stream()
-                .map(s -> s.split("-"))
-                .map(s -> new AbstractMap.SimpleEntry<>(toLong(s[0]), toLong(s[1])))
+        List<IpAddressRange> ranges = lines.stream()
+                .map(IpAddressRange::new)
+                .sorted((e1, e2) -> e1.start - e2.start < 0 ? -1 : 1)
                 .collect(Collectors.toList());
 
-
-        long min = lines.stream()
-                .map(s -> s.split("-"))
-                .mapToLong(s -> toLong(s[0]))
-                .min().getAsLong();
-
-        long max = lines.stream()
-                .map(s -> s.split("-"))
-                .mapToLong(s -> toLong(s[1]))
-                .max().getAsLong();
-
-
-        while (min <= max) {
-
-            boolean exists = false;
-            for (AbstractMap.SimpleEntry<Long, Long> entry : list) {
-                if (!exists && (min >= entry.getKey() && min <= entry.getValue())) {
-                    exists = true;
-                }
+        long current = 1;
+        long allowed = 0;
+        for (IpAddressRange range : ranges) {
+            if (current < range.start) {
+                allowed += (range.start - current);
             }
-            if(!exists){
-                break;
+
+            if (current < range.end) {
+                current = range.end + 1;
             }
-            min++;
         }
 
-        System.out.println(min);
+        System.out.println(allowed);
 
+    }
 
+}
+
+class IpAddressRange {
+    long start;
+    long end;
+
+    public IpAddressRange(String str) {
+        String[] parts = str.split("-");
+        this.start = toLong(parts[0]);
+        this.end = toLong(parts[1]);
     }
 }
