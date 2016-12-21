@@ -3,8 +3,7 @@ package adventofcode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static adventofcode.Utils.toInt;
 
@@ -12,14 +11,66 @@ public class Day21 {
 
     public static void main(String[] args) throws IOException {
 
-        String str = "abcdefgh";
+        for (String input : permuations("abcdefgh")) {
+            if(Objects.equals(String.valueOf(result(input)), "fbgdceah")){
+                System.out.println("Result is "+input);
+                break;
+            }
+        }
+
+    }
+
+
+    private static List<String> permuations(String str) {
+        List<String> permuations = new ArrayList<>();
+        int length = str.length();
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < length; j++) {
+                for (int k = 0; k < length; k++) {
+                    for (int l = 0; l < length; l++) {
+                        for (int m = 0; m < length; m++) {
+                            for (int n = 0; n < length; n++) {
+                                for (int o = 0; o < length; o++) {
+                                    for (int p = 0; p < length; p++) {
+                                        char[] chs = new char[8];
+                                        chs[0] = str.charAt(i);
+                                        chs[1] = str.charAt(j);
+                                        chs[2] = str.charAt(k);
+                                        chs[3] = str.charAt(l);
+                                        chs[4] = str.charAt(m);
+                                        chs[5] = str.charAt(n);
+                                        chs[6] = str.charAt(o);
+                                        chs[7] = str.charAt(p);
+
+                                        Set<Character> characterSet = new HashSet<>();
+                                        for (int q = 0; q < chs.length; q++) {
+                                            characterSet.add(chs[q]);
+                                        }
+
+                                        if (characterSet.size() == 8) {
+                                            permuations.add(String.valueOf(chs));
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return permuations;
+
+    }
+
+    private static char[] result(String str) throws IOException {
         char[] input = str.toCharArray();
 
         List<String> lines = Files.readAllLines(Paths.get("src", "main", "resources", "problem21.txt"));
 
         for (String line : lines) {
             try {
-                System.out.println(input);
+//                System.out.println(input);
                 String[] parts = line.split("\\s");
                 if (line.startsWith("swap position")) {
 
@@ -53,41 +104,17 @@ public class Day21 {
                     System.out.println("Can't understand line: " + line);
                 }
 
-                System.out.println(line);
-                System.out.println(input);
-
-                System.out.println();
-                System.out.println();
+//                System.out.println(line);
+//                System.out.println(input);
+//
+//                System.out.println();
+//                System.out.println();
             } catch (Exception e) {
                 throw new RuntimeException(line, e);
             }
         }
 
-        System.out.println(input);
-
-
-//        char[] input2 = swap(input, 4, 0);
-//        System.out.println(input2);
-//        char[] input3 = swap(input2, 'd', 'b');
-//        System.out.println(input3);
-//        char[] input4 = reverse(input3, 0, 4);
-//        System.out.println(input4);
-//
-//        char[] input5 = rotateLeft(input4, 1);
-//        System.out.println(input5);
-//
-//        char[] input6 = move(input5, 1, 4);
-//        System.out.println(input6);
-//
-//        char[] input7 = move(input6, 3, 0);
-//        System.out.println(input7);
-//
-//        char[] input8 = rotateByCh(input7, 'b');
-//        System.out.println(input8);
-//
-//
-//        System.out.println(rotateByCh(input8, 'd'));
-
+        return input;
     }
 
 
